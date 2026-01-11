@@ -47,7 +47,6 @@ def set_language(lang):
     if lang in ['en', 'de']:
         session['lang'] = lang
     return redirect(request.referrer or url_for('index'))
-
 # Database initialization
 def init_db():
     conn = sqlite3.connect('ecoswap.db')

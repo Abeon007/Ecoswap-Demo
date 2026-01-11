@@ -144,6 +144,9 @@ Delete `ecoswap.db` and restart the application to recreate the database:
 rm ecoswap.db
 python app.py
 ```
+<<<<<<< HEAD
 
 ## Support
 For issues or questions, please refer to the project documentation or contact the development team.
+=======
+>>>>>>> 8bd38e5ef3e07329850be35153836c4e1246a7db
