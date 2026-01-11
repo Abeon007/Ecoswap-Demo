@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t('admin.manageListings') }} - {{ t('common.admin') }}{% endblock %}
+
+{% block content %}
+<section class="admin-section">
+    <div class="container">
+        <div class="page-header">
+            <div>
+                <h1>{{ t('admin.manageListings') }}</h1>
+                <p>{{ t('admin.manageListingsDesc') }}</p>
+            </div>
+            <a href="{{ url_for('admin_dashboard') }}" class="btn-secondary">{{ t('admin.backToDashboard') }}</a>
+        </div>
+
+        <div class="table-container">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>{{ t('admin.idCol') }}</th>
+                        <th>{{ t('admin.titleCol') }}</th>
+                        <th>{{ t('admin.ownerCol') }}</th>
+                        <th>{{ t('admin.categoryLabel') }}</th>
+                        <th>{{ t('admin.typeCol') }}</th>
+                        <th>{{ t('admin.statusCol') }}</th>
+                        <th>{{ t('admin.createdCol') }}</th>
+                        <th>{{ t('common.actions') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if listings %}
+                    {% for listing in listings %}
+                    <tr>
+                        <td>{{ listing['id'] }}</td>
+                        <td>{{ listing['title'] }}</td>
+                        <td>
+                            {{ listing['display_name'] }}<br>
+                            <small>{{ listing['email'] }}</small>
+                        </td>
+                        <td>{{ t('marketplace.categories.' + listing['category']) }}</td>
+                        <td><span class="badge-{{ listing['listing_type'].lower() }}">{{ t('marketplace.' +
+                                listing['listing_type'].lower()) }}</span></td>
+                        <td><span class="badge-{{ listing['status'].lower() }}">{{ t('status.' + listing['status'])
+                                }}</span></td>
+                        <td>{{ listing['created_at'][:10] }}</td>
+                        <td>
+                            <a href="{{ url_for('admin_delete_listing', listing_id=listing['id']) }}"
+                                class="btn-danger btn-small"
+                                onclick="return confirm('{{ t('dashboard.deleteConfirm') }}')">{{ t('dashboard.delete')
+                                }}</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td colspan="8" class="text-center">{{ t('admin.noListings') }}</td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+{% endblock %}

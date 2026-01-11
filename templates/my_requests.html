@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t('dashboard.requests') }} - {{ t('common.appName') }}{% endblock %}
+
+{% block content %}
+<section class="requests-section">
+    <div class="container">
+        <div class="page-header">
+            <h1>{{ t('dashboard.requests') }}</h1>
+            <p>{{ t('dashboard.manageRequests') }}</p>
+        </div>
+
+        <div class="requests-tabs">
+            <div class="tab active" onclick="showTab('sent')">{{ t('dashboard.requestsSent') }}</div>
+            <div class="tab" onclick="showTab('received')">{{ t('dashboard.requestsReceived') }}</div>
+        </div>
+
+        <!-- Requests I Sent -->
+        <div id="sent-requests" class="requests-list">
+            <h2>{{ t('dashboard.requestsSent') }}</h2>
+            {% if my_requests %}
+            {% for request in my_requests %}
+            <div class="request-card">
+                <div class="request-image">
+                    {% if request['image_path'] %}
+                    <img src="{{ url_for('static', filename=request['image_path']) }}" alt="{{ request['title'] }}">
+                    {% else %}
+                    <div class="request-placeholder"><svg width="48" height="48" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor"></circle>
+                            <polyline points="21 15 16 10 5 21"></polyline>
+                        </svg></div>
+                    {% endif %}
+                </div>
+                <div class="request-content">
+                    <h3>{{ request['title'] }}</h3>
+                    <p>{{ t('dashboard.owner') }}: <strong>{{ request['owner_name'] }}</strong></p>
+                    <p class="request-date">{{ t('dashboard.requestedOn') }}: {{ request['request_date'] }}</p>
+                </div>
+                <div class="request-status status-{{ request['status'].lower() }}">
+                    {{ t('status.' + request['status']) }}
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="empty-state">
+                <span class="empty-icon"><svg width="80" height="80" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg></span>
+                <h3>{{ t('dashboard.noRequestsYet') }}</h3>
+                <p>{{ t('dashboard.browseMarketplace') }}</p>
+                <a href="{{ url_for('marketplace') }}" class="btn-primary">{{ t('home.exploreMarketplace') }}</a>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Requests I Received -->
+        <div id="received-requests" class="requests-list" style="display: none;">
+            <h2>{{ t('dashboard.requestsReceived') }}</h2>
+            {% if received_requests %}
+            {% for request in received_requests %}
+            <div class="request-card">
+                <div class="request-image">
+                    {% if request['image_path'] %}
+                    <img src="{{ url_for('static', filename=request['image_path']) }}" alt="{{ request['title'] }}">
+                    {% else %}
+                    <div class="request-placeholder"><svg width="48" height="48" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor"></circle>
+                            <polyline points="21 15 16 10 5 21"></polyline>
+                        </svg></div>
+                    {% endif %}
+                </div>
+                <div class="request-content">
+                    <h3>{{ request['title'] }}</h3>
+                    <p>{{ t('dashboard.requester') }}: <strong>{{ request['requester_name'] }}</strong></p>
+                    <p class="request-date">{{ t('dashboard.requestedOn') }}: {{ request['request_date'] }}</p>
+                </div>
+                <div class="request-actions">
+                    {% if request['status'] == 'Pending' %}
+                    <a href="{{ url_for('handle_request', request_id=request['id'], action='accept') }}"
+                        class="btn-primary btn-small" onclick="return confirm('{{ t('dashboard.acceptConfirm') }}')">{{
+                        t('dashboard.accept') }}</a>
+                    <a href="{{ url_for('handle_request', request_id=request['id'], action='decline') }}"
+                        class="btn-secondary btn-small"
+                        onclick="return confirm('{{ t('dashboard.declineConfirm') }}')">{{ t('dashboard.reject') }}</a>
+                    {% else %}
+                    <div class="request-status status-{{ request['status'].lower() }}">
+                        {{ t('status.' + request['status']) }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="empty-state">
+                <span class="empty-icon"><svg width="80" height="80" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect>
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                    </svg></span>
+                <h3>{{ t('dashboard.noRequestsYet') }}</h3>
+                <p>{{ t('dashboard.receivedEmptyState') }}</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<script>
+    function showTab(tab) {
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(t => t.classList.remove('active'));
+
+        if (tab === 'sent') {
+            tabs[0].classList.add('active');
+            document.getElementById('sent-requests').style.display = 'block';
+            document.getElementById('received-requests').style.display = 'none';
+        } else {
+            tabs[1].classList.add('active');
+            document.getElementById('sent-requests').style.display = 'none';
+            document.getElementById('received-requests').style.display = 'block';
+        }
+    }
+</script>
+{% endblock %}

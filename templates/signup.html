@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t('signup.joinEcoSwap') }} - {{ t('common.appName') }}{% endblock %}
+
+{% block content %}
+<section class="auth-section">
+    <div class="container">
+        <div class="auth-wrapper">
+            <div class="auth-form">
+                <div class="form-header">
+                    <svg class="logo-large" width="64" height="64" viewBox="0 0 24 24" fill="none"
+                        xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L4 7V17L12 22L20 17V7L12 2Z" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M12 22V12" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M20 7L12 12L4 7" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <h2>{{ t('signup.joinEcoSwap') }}</h2>
+                    <p>{{ t('signup.subtitle') }}</p>
+                </div>
+                <form method="POST" action="{{ url_for('signup') }}">
+                    <div class="form-group">
+                        <label for="display_name">{{ t('signup.fullName') }}</label>
+                        <input type="text" id="display_name" name="display_name"
+                            placeholder="{{ t('signup.namePlaceholder') }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">{{ t('signup.email') }}</label>
+                        <input type="email" id="email" name="email" placeholder="{{ t('signup.emailPlaceholder') }}"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">{{ t('signup.password') }}</label>
+                        <input type="password" id="password" name="password"
+                            placeholder="{{ t('signup.passwordPlaceholder') }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="location">Location</label>
+                        <input type="text" id="location" name="location" placeholder="City, State" required>
+                    </div>
+                    <button type="submit" class="btn-primary btn-full">{{ t('signup.createAccount') }}</button>
+                </form>
+                <p class="form-footer">
+                    {{ t('signup.hasAccount') }} <a href="{{ url_for('login') }}">{{ t('signup.signIn') }}</a>
+                </p>
+                <a href="{{ url_for('index') }}" class="back-link">{{ t('common.backToHome') }}</a>
+            </div>
+            <div class="auth-image">
+                <div class="auth-image-content">
+                    <h3>{{ t('signup.startTitle') }}</h3>
+                    <p>{{ t('signup.startDesc') }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

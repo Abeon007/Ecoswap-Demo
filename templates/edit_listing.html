@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t('dashboard.editListingTitle') }} - {{ t('common.appName') }}{% endblock %}
+
+{% block content %}
+<section class="form-section">
+    <div class="container-small">
+        <div class="page-header">
+            <h1>{{ t('dashboard.editListingTitle') }}</h1>
+            <p>{{ t('dashboard.updateDetails') }}</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('edit_listing', listing_id=listing['id']) }}" class="listing-form">
+            <div class="form-group">
+                <label for="title">{{ t('dashboard.titleLabel') }}</label>
+                <input type="text" id="title" name="title" value="{{ listing['title'] }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description">{{ t('dashboard.descriptionLabel') }}</label>
+                <textarea id="description" name="description" rows="5" required>{{ listing['description'] }}</textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="category">{{ t('dashboard.categoryLabel') }}</label>
+                    <select id="category" name="category" required>
+                        {% for cat in ["Furniture", "Electronics", "Books", "Clothing", "Sports", "Home & Garden",
+                        "Other"] %}
+                        <option value="{{ cat }}" {% if listing['category']==cat %}selected{% endif %}>{{
+                            t('marketplace.categories.' + cat) }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="condition">{{ t('dashboard.conditionLabel') }}</label>
+                    <select id="condition" name="condition" required>
+                        {% for cond in ["New", "Like New", "Good", "Fair"] %}
+                        <option value="{{ cond }}" {% if listing['condition']==cond %}selected{% endif %}>{{ t('status.'
+                            + cond) }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="listing_type">{{ t('dashboard.listingTypeLabel') }}</label>
+                <select id="listing_type" name="listing_type" required>
+                    <option value="Exchange" {% if listing['listing_type']=='Exchange' %}selected{% endif %}>{{
+                        t('dashboard.exchangeLong') }}</option>
+                    <option value="Donate" {% if listing['listing_type']=='Donate' %}selected{% endif %}>{{
+                        t('dashboard.donateLong') }}</option>
+                </select>
+            </div>
+
+            <div class="form-actions">
+                <a href="{{ url_for('my_listings') }}" class="btn-secondary">{{ t('dashboard.cancel') }}</a>
+                <button type="submit" class="btn-primary">{{ t('dashboard.updateListing') }}</button>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

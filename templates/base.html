@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="{{ current_lang }}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ t('common.appName') }}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <svg class="logo" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L4 7V17L12 22L20 17V7L12 2Z" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M12 22V12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <path d="M20 7L12 12L4 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+                <a href="{{ url_for('index') }}">{{ t('common.appName') }}</a>
+
+                <div class="lang-switcher">
+                    <a href="{{ url_for('set_language', lang='en') }}"
+                        class="lang-btn {% if current_lang == 'en' %}active{% endif %}">EN</a>
+                    <a href="{{ url_for('set_language', lang='de') }}"
+                        class="lang-btn {% if current_lang == 'de' %}active{% endif %}">DE</a>
+                </div>
+            </div>
+            <div class="nav-links">
+                {% if session.get('user_id') %}
+                {% if session.get('is_admin') %}
+                <a href="{{ url_for('admin_dashboard') }}">{{ t('common.admin') }}</a>
+                <a href="{{ url_for('admin_users') }}">{{ t('admin.users') }}</a>
+                <a href="{{ url_for('admin_listings') }}">{{ t('admin.allItems') }}</a>
+                {% else %}
+                <a href="{{ url_for('marketplace') }}">{{ t('common.marketplace') }}</a>
+                <a href="{{ url_for('my_listings') }}">{{ t('common.myItems') }}</a>
+                <a href="{{ url_for('my_requests') }}">{{ t('dashboard.requests') }}</a>
+                <a href="{{ url_for('create_listing') }}" class="btn-primary">+ {{ t('dashboard.addItem') }}</a>
+                {% endif %}
+                <span class="user-name">{{ session.get('display_name') }}</span>
+                <a href="{{ url_for('logout') }}" class="btn-secondary">{{ t('common.logout') }}</a>
+                {% else %}
+                <a href="{{ url_for('login') }}">{{ t('common.signIn') }}</a>
+                <a href="{{ url_for('signup') }}" class="btn-primary">{{ t('common.joinNow') }}</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flash-messages">
+        {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">
+            {{ message }}
+            <button onclick="this.parentElement.remove()">×</button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© 2025 EcoSwap. Building a sustainable future together.</p>
+        </div>
+    </footer>
+</body>
+
+</html>

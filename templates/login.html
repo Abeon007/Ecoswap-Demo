@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t('login.welcomeBack') }} - {{ t('common.appName') }}{% endblock %}
+
+{% block content %}
+<section class="auth-section">
+    <div class="container">
+        <div class="auth-wrapper">
+            <div class="auth-form">
+                <div class="form-header">
+                    <svg class="logo-large" width="64" height="64" viewBox="0 0 24 24" fill="none"
+                        xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L4 7V17L12 22L20 17V7L12 2Z" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M12 22V12" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M20 7L12 12L4 7" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <h2>{{ t('login.welcomeBack') }}</h2>
+                    <p>{{ t('login.subtitle') }}</p>
+                </div>
+                <form method="POST" action="{{ url_for('login') }}">
+                    <div class="form-group">
+                        <label for="email">{{ t('login.email') }}</label>
+                        <input type="email" id="email" name="email" placeholder="{{ t('login.emailPlaceholder') }}"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">{{ t('login.password') }}</label>
+                        <input type="password" id="password" name="password"
+                            placeholder="{{ t('login.passwordPlaceholder') }}" required>
+                    </div>
+                    <button type="submit" class="btn-primary btn-full">{{ t('login.signInButton') }}</button>
+                </form>
+                <div class="demo-credentials">
+                    <p><strong>{{ t('login.demoCredentials') }}</strong></p>
+                    <p>Admin: admin@ecoswap.com / admin123</p>
+                </div>
+                <p class="form-footer">
+                    {{ t('login.noAccount') }} <a href="{{ url_for('signup') }}">{{ t('login.signUp') }}</a>
+                </p>
+                <a href="{{ url_for('index') }}" class="back-link">{{ t('common.backToHome') }}</a>
+            </div>
+            <div class="auth-image">
+                <div class="auth-image-content">
+                    <h3>{{ t('login.welcomeTitle') }}</h3>
+                    <p>{{ t('login.welcomeDesc') }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
